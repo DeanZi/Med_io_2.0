@@ -6,4 +6,4 @@ A new Flutter project. to be our final project in BIU university in the departme
 
 //TODO
 
-SIMO,YONA & DEAN
+SIMO ,YONA & DEAN
