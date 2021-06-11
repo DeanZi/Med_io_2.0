@@ -34,12 +34,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.expand_more_outlined),
             label: 'Details',
-            backgroundColor: Colors.green,
+            backgroundColor: Colors.amber,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),

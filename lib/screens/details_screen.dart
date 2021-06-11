@@ -21,7 +21,7 @@ class _WatchScreenState extends State<DetailsScreen> {
           clipBehavior: Clip.none,
           children: [
             Image.asset(
-              'assets/images/watch.png',
+              'assets/watch.png',
               height: MediaQuery.of(context).size.height ,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fill,
@@ -98,7 +98,7 @@ class _WatchScreenState extends State<DetailsScreen> {
               ],
             ),
             SizedBox(height: Dimensions.heightSize * 2,),
-            //detailsWidget(context)
+            detailsWidget(context)
           ],
         ),
       ),
@@ -117,14 +117,77 @@ class _WatchScreenState extends State<DetailsScreen> {
         right: Dimensions.marginSize,
       ),
       child: Container(
-        height: MediaQuery.of(context).size.height,
+        height: 200,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Dimensions.radius * 2),
-              topRight: Radius.circular(Dimensions.radius * 2),
-            )
+        child: ListView.builder(
+          itemCount: 1,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(
+                  left: Dimensions.widthSize ,
+                  right: Dimensions.widthSize ,
+                  top: 10,
+                  bottom: 10
+              ),
+              child: GestureDetector(
+                child:   DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'Name',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Age',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Designation',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  rows: const <DataRow>[
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Mohit')),
+                        DataCell(Text('23')),
+                        DataCell(Text('Associate Software Developer')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Akshay')),
+                        DataCell(Text('25')),
+                        DataCell(Text('Software Developer')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Deepak')),
+                        DataCell(Text('29')),
+                        DataCell(Text('Team Lead ')),
+                      ],
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                  //     DoctorDetailsScreen(
+                  //       image: topDoctor.image,
+                  //       name: topDoctor.type,
+                  //       specialist: topDoctor.type,
+                  //       available: topDoctor.date,
+                  //     )));
+                },
+              ),
+            );
+          },
         ),
       ),
     );
