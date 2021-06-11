@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medio2/screens/on_board_screen.dart';
 import 'package:medio2/screens/user_info_screen.dart';
 import 'package:medio2/utils/authentication.dart';
 
@@ -29,13 +30,15 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
             ),
           ),
         ),
-        onPressed: () async {
+        onPressed: ()  async {
           setState(() {
             _isSigningIn = true;
           });
 
           User? user =
           await Authentication.signInWithGoogle(context: context);
+
+
 
           setState(() {
             _isSigningIn = false;
@@ -44,13 +47,17 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
           if (user != null) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => UserInfoScreen(
+                builder: (context) => DashboardScreen(
                   user: user,
                 ),
               ),
             );
           }
+
+
+
         },
+
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Row(

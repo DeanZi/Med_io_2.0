@@ -19,7 +19,7 @@ class UserInfoScreen extends StatefulWidget {
 class _UserInfoScreenState extends State<UserInfoScreen> {
   late User _user;
   bool _isSigningOut = false;
-
+  int currentIndex = 0;
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => SignInScreen(),
@@ -49,13 +49,16 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: CustomColors.firebaseNavy,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: CustomColors.firebaseNavy,
         title: AppBarTitle(),
       ),
-      body: SafeArea(
+      body:
+
+      SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
             left: 16.0,
@@ -168,4 +171,5 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       ),
     );
   }
+
 }
