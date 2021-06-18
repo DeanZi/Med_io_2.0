@@ -1,8 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/utils/Dimensions.dart';
 
 class DetailsScreen extends StatefulWidget {
+  const DetailsScreen({Key? key, required User user})
+      : _user = user,
+        super(key: key);
+
+  final User _user;
   @override
   _WatchScreenState createState() => _WatchScreenState();
 }
@@ -11,7 +18,13 @@ class _WatchScreenState extends State<DetailsScreen> {
 
   TextEditingController searchController = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  late User _user;
+  @override
+  void initState() {
+    _user = widget._user;
 
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,13 +92,11 @@ class _WatchScreenState extends State<DetailsScreen> {
                     right: Dimensions.marginSize * 2,
                   ),
                   child: Text(
-                    "Mr Yona",
+                    _user.displayName!,
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Dimensions.extraLargeTextSize * 1.6,
-                        fontWeight: FontWeight.bold
+                      color: CustomColors.firebaseYellow,
+                      fontSize: 26,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: Dimensions.heightSize * 2,),
@@ -135,19 +146,19 @@ class _WatchScreenState extends State<DetailsScreen> {
                   columns: const <DataColumn>[
                     DataColumn(
                       label: Text(
-                        'Name',
+                        'Time',
                         style: TextStyle(fontStyle: FontStyle.italic),
                       ),
                     ),
                     DataColumn(
                       label: Text(
-                        'Age',
+                        'Heart Rate',
                         style: TextStyle(fontStyle: FontStyle.italic),
                       ),
                     ),
                     DataColumn(
                       label: Text(
-                        'Designation',
+                        'Saturation',
                         style: TextStyle(fontStyle: FontStyle.italic),
                       ),
                     ),

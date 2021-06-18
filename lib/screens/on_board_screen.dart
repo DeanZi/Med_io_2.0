@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/screens/details_screen.dart';
+import 'package:medio2/screens/emergency_screen.dart';
 import 'package:medio2/screens/user_info_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -28,32 +29,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF4285F4),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: Colors.green,
+            backgroundColor: Color(0xFFECEFF1),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.expand_more_outlined),
+            icon: Icon(Icons.perm_identity_outlined),
             label: 'Details',
-            backgroundColor: Colors.amber,
+            backgroundColor: Color(0xFFECEFF1),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
-            backgroundColor: Colors.purple,
+            icon: Icon(Icons.local_hospital_rounded),
+            label: 'SOS',
+            backgroundColor: Color(0xFFECEFF1),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
-            backgroundColor: Colors.pink,
+            backgroundColor: Color(0xFFECEFF1),
           ),
         ],
         currentIndex: currentIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.black,
         onTap: _onTapIndex,
       ),
       body: goToScreen(currentIndex),
@@ -74,7 +75,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 0:
         return UserInfoScreen(user: _user);
       case 1:
-        return DetailsScreen();
+        return DetailsScreen(user: _user);
+      case 2:
+        return EmergencyScreen();
 
     }
   }
