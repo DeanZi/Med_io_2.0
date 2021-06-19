@@ -37,7 +37,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                       begin: FractionalOffset.topCenter,
                       end: FractionalOffset.bottomCenter,
                       colors: [
-                        // Colors.grey.withOpacity(0.5),
+                        Colors.grey.withOpacity(0.5),
                         Color(0xFF4C6BFF),
                       ]
                   )

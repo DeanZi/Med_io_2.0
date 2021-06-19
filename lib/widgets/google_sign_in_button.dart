@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medio2/screens/emergency_screen.dart';
 import 'package:medio2/screens/on_board_screen.dart';
-import 'package:medio2/screens/user_info_screen.dart';
 import 'package:medio2/utils/authentication.dart';
 
 class GoogleSignInButton extends StatefulWidget {
@@ -38,22 +38,41 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
           User? user =
           await Authentication.signInWithGoogle(context: context);
 
-
-
           setState(() {
             _isSigningIn = false;
           });
 
-          if (user != null) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => DashboardScreen(
-                  user: user,
-                ),
-              ),
-            );
-          }
 
+
+          if (user != null ) {
+
+            print('this is last sign in: ' + user.metadata.lastSignInTime.toString());
+            print('this is creation time: ' + user.metadata.creationTime.toString());
+            Duration signUpInterval = new Duration(milliseconds: 1000);
+            DateTime lastSignIn = DateTime.parse(user.metadata.lastSignInTime.toString());
+            DateTime creationTime = DateTime.parse(user.metadata.creationTime.toString());
+            if(user.metadata.creationTime!.minute !=null && user.metadata.lastSignInTime != null){
+              if((lastSignIn.difference(creationTime) ) >= signUpInterval){
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => DashboardScreen(
+                      user: user,
+                    ),
+                  ),
+                );
+              }else{
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    //TODO: to replace the EmergencyScreen with questionnaire
+                    builder: (context) => DashboardScreen( user: user,
+                    ),
+                  ),
+                );
+              }
+            }
+
+
+          }
 
 
         },
@@ -86,3 +105,4 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     );
   }
 }
+

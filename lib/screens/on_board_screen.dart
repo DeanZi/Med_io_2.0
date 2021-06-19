@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/screens/details_screen.dart';
 import 'package:medio2/screens/emergency_screen.dart';
+import 'package:medio2/screens/quetionnaire.dart';
 import 'package:medio2/screens/user_info_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -78,7 +78,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return DetailsScreen(user: _user);
       case 2:
         return EmergencyScreen();
-
+      case 3:
+        return FormScreen();
     }
   }
 }
