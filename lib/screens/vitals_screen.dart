@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/globals.dart' as globals;
 
+
 class VitalsScreen extends StatefulWidget {
   const VitalsScreen({Key? key, required User user, required String id})
       : _user = user,
@@ -129,10 +130,9 @@ class _VitalsScreenState extends State<VitalsScreen> {
                       'oxygen': "95",
                       'date_time': new DateTime.now().toUtc().toString()
                     }];
-                    print("This is ID:" + globals.itemID);
                     FirebaseFirestore.instance
                         .collection('patient_test')
-                        .doc(globals.itemID)
+                        .doc(_user.uid)
                         .update({"vitals": FieldValue.arrayUnion(list)});
 
                     // Navigator.of(context).pushReplacement(

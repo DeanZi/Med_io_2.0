@@ -203,18 +203,33 @@ class FormScreenState extends State<FormScreen> {
                     print(_diseases);
                     print(_medications);
 
+
                      FirebaseFirestore.instance
                          .collection('patient_test')
-                         .add({'age':_age,
-                          'disease' :_diseases,
-                          'firstName' : _firstName,
-                          'gender' : _sex,
-                          'lastName' : _lastName,
-                          'lives_alone' : _livesAlone,
-                          'medication' : _medications,
-                          'vitals': _vitals,
-                          'itemID': "",
-                          }).then((value) => (updateItemID(value.id)));
+                         .doc(_user.uid)
+                         .set({'age':_age,
+                       'disease' :_diseases,
+                       'firstName' : _firstName,
+                       'gender' : _sex,
+                       'lastName' : _lastName,
+                       'lives_alone' : _livesAlone,
+                       'medication' : _medications,
+                       'vitals': _vitals,
+                       'itemID': _user.uid,
+                     });
+
+                     // FirebaseFirestore.instance
+                     //     .collection('patient_test')
+                     //     .add({'age':_age,
+                     //      'disease' :_diseases,
+                     //      'firstName' : _firstName,
+                     //      'gender' : _sex,
+                     //      'lastName' : _lastName,
+                     //      'lives_alone' : _livesAlone,
+                     //      'medication' : _medications,
+                     //      'vitals': _vitals,
+                     //      'itemID': "",
+                     //    }).then((value) => (updateItemID(value.id)));
                      Navigator.of(context).pushReplacement(
                        MaterialPageRoute(
                          builder: (context) => DashboardScreen(id: _id,
