@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medio2/screens/emergency_screen.dart';
-import 'package:medio2/screens/on_board_screen.dart';
+import 'package:medio2/screens/dashboard_screen.dart';
+import 'package:medio2/screens/quetionnaire_screen.dart';
 import 'package:medio2/utils/authentication.dart';
 
 class GoogleSignInButton extends StatefulWidget {
@@ -55,7 +55,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               if((lastSignIn.difference(creationTime) ) >= signUpInterval){
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => DashboardScreen(
+                    builder: (context) => DashboardScreen(id: "0",
                       user: user,
                     ),
                   ),
@@ -64,7 +64,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     //TODO: to replace the EmergencyScreen with questionnaire
-                    builder: (context) => DashboardScreen( user: user,
+                    builder: (context) => FormScreen( user: user, id: "0",
                     ),
                   ),
                 );

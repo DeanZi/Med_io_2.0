@@ -1,16 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medio2/screens/details_screen.dart';
+import 'package:medio2/screens/vitals_screen.dart';
 import 'package:medio2/screens/emergency_screen.dart';
-import 'package:medio2/screens/quetionnaire.dart';
+import 'package:medio2/screens/quetionnaire_screen.dart';
 import 'package:medio2/screens/user_info_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key, required User user})
+  const DashboardScreen({Key? key, required User user, required String id})
       : _user = user,
+        _id = id,
         super(key: key);
-
+  final String _id;
   final User _user;
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -18,12 +19,13 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   late User _user;
+  late String _id;
   int currentIndex = 0;
 
   @override
   void initState() {
     _user = widget._user;
-
+    _id = widget._id;
     super.initState();
   }
   @override
@@ -39,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity_outlined),
-            label: 'Details',
+            label: 'Vitals',
             backgroundColor: Color(0xFFECEFF1),
           ),
           BottomNavigationBarItem(
@@ -75,11 +77,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 0:
         return UserInfoScreen(user: _user);
       case 1:
-        return DetailsScreen(user: _user);
+        return VitalsScreen(user: _user, id: _id);
       case 2:
         return EmergencyScreen();
       case 3:
-        return FormScreen();
+        return FormScreen(user: _user, id: _id);
     }
   }
 }

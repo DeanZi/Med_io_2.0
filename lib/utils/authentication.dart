@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:medio2/screens/on_board_screen.dart';
+import 'package:medio2/screens/dashboard_screen.dart';
+import 'package:medio2/screens/quetionnaire_screen.dart';
 
 
 class Authentication {
@@ -16,12 +18,26 @@ class Authentication {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => DashboardScreen(user: user,
+
+      Duration diff = user.metadata.creationTime!.difference(user.metadata.lastSignInTime!);
+      bool firstTimeUser = diff.inMilliseconds > 1000;
+      print(diff.inMilliseconds);
+      if(!firstTimeUser){
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => DashboardScreen(user: user, id:"0",
+            ),
           ),
-        ),
-      );
+        );
+      }else{
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => FormScreen(user: user,id:"0"
+            ),
+          ),
+        );
+      }
+
     }
 
     return firebaseApp;

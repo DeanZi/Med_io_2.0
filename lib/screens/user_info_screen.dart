@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/screens/sign_in_screen.dart';
+import 'package:medio2/utils/Dimensions.dart';
 import 'package:medio2/utils/authentication.dart';
 import 'package:medio2/widgets/app_bar_title.dart';
 
@@ -92,6 +93,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   ),
                 ),
               ),
+              bodyWidget(context),
               SizedBox(height: 16.0),
               Text(
                 'Hello',
@@ -108,7 +110,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   fontSize: 26,
                 ),
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 5.0),
               Text(
                 '( ${_user.email!} )',
                 style: TextStyle(
@@ -117,14 +119,14 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   letterSpacing: 0.5,
                 ),
               ),
-              SizedBox(height: 24.0),
-              Text(
-                'You are now signed in using your Google account. To sign out of your account click the "Sign Out" button below.',
-                style: TextStyle(
-                    color: CustomColors.firebaseGrey.withOpacity(0.8),
-                    fontSize: 14,
-                    letterSpacing: 0.2),
-              ),
+              // SizedBox(height: 24.0),
+              // Text(
+              //   'You are now signed in using your Google account. To sign out of your account click the "Sign Out" button below.',
+              //   style: TextStyle(
+              //       color: CustomColors.firebaseGrey.withOpacity(0.8),
+              //       fontSize: 14,
+              //       letterSpacing: 0.2),
+              // ),
               SizedBox(height: 16.0),
               _isSigningOut
                   ? CircularProgressIndicator(
@@ -167,6 +169,139 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+  bodyWidget(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: Dimensions.heightSize /8
+      ),
+      child: Container(
+        width: MediaQuery.of(context).size.width / 1.4,
+        height: MediaQuery.of(context).size.height /1.4,
+        child: ListView(
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: Dimensions.marginSize,
+                right: Dimensions.marginSize,
+                top: Dimensions.heightSize,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize * 2,
+                    right: Dimensions.marginSize * 2,
+                  ),
+                  child: Text(
+                    _user.displayName!,
+                    style: TextStyle(
+                      color: CustomColors.firebaseYellow,
+                      fontSize: 26,
+                    ),
+                  ),
+                ),
+                SizedBox(height: Dimensions.heightSize * 2,),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: Dimensions.marginSize * 2,
+                    right: Dimensions.marginSize * 2,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: Dimensions.heightSize * 2,),
+            detailsWidget(context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  detailsWidget(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: Dimensions.marginSize,
+        right: Dimensions.marginSize,
+      ),
+      child: Container(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        child: ListView.builder(
+          itemCount: 1,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(
+                  left: Dimensions.widthSize ,
+                  right: Dimensions.widthSize ,
+                  top: 10,
+                  bottom: 10
+              ),
+              child: GestureDetector(
+                child:   DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'Time',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Heart Rate',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Saturation',
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                  rows: const <DataRow>[
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Mohit')),
+                        DataCell(Text('23')),
+                        DataCell(Text('Associate Software Developer')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Akshay')),
+                        DataCell(Text('25')),
+                        DataCell(Text('Software Developer')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text('Deepak')),
+                        DataCell(Text('29')),
+                        DataCell(Text('Team Lead ')),
+                      ],
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                  //     DoctorDetailsScreen(
+                  //       image: topDoctor.image,
+                  //       name: topDoctor.type,
+                  //       specialist: topDoctor.type,
+                  //       available: topDoctor.date,
+                  //     )));
+                },
+              ),
+            );
+          },
         ),
       ),
     );

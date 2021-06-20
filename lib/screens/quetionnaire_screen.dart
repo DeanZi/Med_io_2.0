@@ -1,7 +1,18 @@
+import 'package:medio2/globals.dart' as globals;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'dashboard_screen.dart';
+
 class FormScreen extends StatefulWidget {
+  const FormScreen({Key? key, required User user, required String id})
+      : _user = user,
+        _id = id,
+        super(key: key);
+  final String _id;
+  final User _user;
+
   @override
   State<StatefulWidget> createState() {
     return FormScreenState();
@@ -16,7 +27,9 @@ class FormScreenState extends State<FormScreen> {
   late String _livesAlone;
   late String _diseases;
   late String _medications;
-
+  late var _vitals = [];
+  late User _user;
+  late String _id;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -80,7 +93,12 @@ class FormScreenState extends State<FormScreen> {
 
 
   }
-
+  @override
+  void initState() {
+    _user = widget._user;
+    _id = widget._id;
+    super.initState();
+  }
 
   Widget _buildSex() {
     return ListView(
@@ -184,6 +202,7 @@ class FormScreenState extends State<FormScreen> {
                     print(_livesAlone);
                     print(_diseases);
                     print(_medications);
+
                      FirebaseFirestore.instance
                          .collection('patient_test')
                          .add({'age':_age,
@@ -192,8 +211,18 @@ class FormScreenState extends State<FormScreen> {
                           'gender' : _sex,
                           'lastName' : _lastName,
                           'lives_alone' : _livesAlone,
-                          'medication' : _medications
-                          });
+                          'medication' : _medications,
+                          'vitals': _vitals,
+                          'itemID': "",
+                          }).then((value) => (updateItemID(value.id)));
+                     Navigator.of(context).pushReplacement(
+                       MaterialPageRoute(
+                         builder: (context) => DashboardScreen(id: _id,
+                           user: _user,
+                         ),
+                       ),
+                     );
+
                     //userSetup(user);
                     //Send to API
                   },
@@ -204,5 +233,11 @@ class FormScreenState extends State<FormScreen> {
         ),
       ),
     );
+  }
+
+  updateItemID(String id) {
+     globals.itemID = id;
+    FirebaseFirestore.instance.collection('patient_test').doc(id).update({'itemID':id});
+
   }
 }
