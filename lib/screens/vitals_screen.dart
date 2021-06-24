@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/globals.dart' as globals;
-
-
+import 'package:flutter_spinbox/material.dart';
 class VitalsScreen extends StatefulWidget {
   const VitalsScreen({Key? key, required User user, required String id})
       : _user = user,
@@ -19,7 +18,7 @@ class VitalsScreen extends StatefulWidget {
 
 class _VitalsScreenState extends State<VitalsScreen> {
   late String _BodyTemp;
-  late String _feeling;
+  late double _feeling;
   late String _BR;
   late User _user;
   late String _id;
@@ -44,20 +43,13 @@ class _VitalsScreenState extends State<VitalsScreen> {
   }
 
   Widget _buildGeneralFeeling() {
-    return ListView(shrinkWrap: true, children: <Widget>[
-      Text('General Feeling 0-5'),
-      DropdownButton<String>(
-        items: <String>['0', '1', '2', '3', '4', '5'].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: new Text(value),
-          );
-        }).toList(),
-        onChanged: (value) {
-          setState(() => _feeling = value!);
-        },
-      )
-    ]);
+    return SpinBox(
+      decoration: InputDecoration(labelText: 'General Feeling 0-5'),
+      min: 1,
+      max: 5,
+      value: 3,
+      onChanged: (value) {_feeling = value;},
+    );
   }
 
   @override
@@ -87,8 +79,24 @@ class _VitalsScreenState extends State<VitalsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Personal information")),
-      body: SingleChildScrollView(
+      appBar: AppBar(title: Text("Personal information",
+                style:TextStyle(color:Colors.orange),)
+                ,backgroundColor: Colors.white,
+                ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color.fromARGB(255, 238, 153, 25),
+          Color.fromARGB(255, 236, 53, 21)
+        ],
+        )
+    ),
+    child: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(24),
           child: Form(
@@ -99,13 +107,15 @@ class _VitalsScreenState extends State<VitalsScreen> {
                 _buildTemp(),
                 _buildBreathingRate(),
                 _buildGeneralFeeling(),
-                SizedBox(height: 100),
+                SizedBox(height: 80),
                 RaisedButton(
+                  color: Colors.white,
                   child: Text(
                     'Submit',
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                    style: TextStyle(color: Colors.red, fontSize: 16),
                   ),
                   onPressed: () {
+                    print(_feeling);
                     if (!_formKey.currentState!.validate()) {
                       return;
                     }
@@ -152,6 +162,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }
