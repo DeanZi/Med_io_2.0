@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:medio2/globals.dart' as globals;
 import 'package:flutter_spinbox/material.dart';
 class VitalsScreen extends StatefulWidget {
-  const VitalsScreen({Key? key, required User user, required String id})
+  const VitalsScreen({Key? key, required User user})
       : _user = user,
-        _id = id,
         super(key: key);
-  final String _id;
   final User _user;
 
   @override
@@ -21,7 +19,6 @@ class _VitalsScreenState extends State<VitalsScreen> {
   late double _feeling;
   late String _BR;
   late User _user;
-  late String _id;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -55,7 +52,6 @@ class _VitalsScreenState extends State<VitalsScreen> {
   @override
   void initState() {
     _user = widget._user;
-    _id = widget._id;
     super.initState();
   }
 
