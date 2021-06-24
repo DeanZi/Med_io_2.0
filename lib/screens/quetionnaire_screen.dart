@@ -1,3 +1,4 @@
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:medio2/globals.dart' as globals;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +25,7 @@ class FormScreenState extends State<FormScreen> {
   late String _lastName;
   late String _age;
   late String _sex;
-  late String _livesAlone;
+  late String _livesAlone ='';
   late String _diseases;
   late String _medications;
   late var _vitals = [];
@@ -33,9 +34,18 @@ class FormScreenState extends State<FormScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    _user = widget._user;
+    _id = widget._id;
+    super.initState();
+    _sex = 'Male';
+    _livesAlone = 'Yes';
+  }
+
   Widget _buildFirstName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'First Name'),
+      decoration: InputDecoration(labelText: 'First Name',filled: true),
         validator: ( value) {
 
 
@@ -53,7 +63,7 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildLastName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Last Name'),
+      decoration: InputDecoration(labelText: 'Last Name',filled: true),
       validator: ( value) {
 
 
@@ -75,11 +85,11 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildAge() {
     return TextFormField(
-              decoration: InputDecoration(labelText: 'Age'),
-    keyboardType: TextInputType.number,
+      decoration: InputDecoration(labelText: 'Age', filled: true),
+      keyboardType: TextInputType.number,
     validator: (value) {
     if (value!.isEmpty) {
-    return 'Valid age is Required';
+      return 'Valid age is Required';
     }
 
     return null;
@@ -93,58 +103,74 @@ class FormScreenState extends State<FormScreen> {
 
 
   }
-  @override
-  void initState() {
-    _user = widget._user;
-    _id = widget._id;
-    super.initState();
-  }
 
   Widget _buildSex() {
-    return ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-
-        Text('Sex'),
-        DropdownButton<String>(
-      items: <String>['Male', 'Female', 'Not declared'].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: new Text(value),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() => _sex = value!);
-      },
-       )
-        ]
+    return DropDownFormField(
+        titleText:'Sex',
+        value: _sex,
+        onSaved: (value) {
+          setState(() {
+            _sex = value!;
+          });
+        },
+        onChanged: (value) {
+          setState(() {
+            _sex = value!;
+          });
+        },
+        dataSource: [
+          {
+            "display": "Male",
+            "value": "Male",
+          },
+          {
+            "display": "Female",
+            "value": "Female",
+          },
+          {
+            "display": "Not declared",
+            "value": "Not declared",
+          },
+        ],
+      textField: 'display',
+      valueField: 'value',
     );
   }
   Widget _buildLivesAlone() {
-    return ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-
-          Text('Do you live alone?'),
-          DropdownButton<String>(
-            items: <String>['Yes', 'No'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: new Text(value),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() => _livesAlone = value!);
-            },
-          )
-        ]
+    return DropDownFormField(
+      titleText:'Do you live alone?',
+      value: _livesAlone,
+      onSaved: (value) {
+        setState(() {
+          _livesAlone = value!;
+        });
+      },
+      onChanged: (value) {
+        setState(() {
+          _livesAlone = value!;
+        });
+      },
+      dataSource: [
+        {
+          "display": "Yes",
+          "value": "Yes",
+        },
+        {
+          "display": "No",
+          "value": "No",
+        }
+      ],
+      textField: 'display',
+      valueField: 'value',
     );
   }
 
 
   Widget _buildDiseases() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Diseases'),
+
+      decoration: InputDecoration(labelText: 'Diseases',filled: true,
+          ),
 
       onSaved: ( value) {
         _diseases = value!;
@@ -154,7 +180,7 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildMedications() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Medications'),
+      decoration: InputDecoration(labelText: 'Medications',filled: true),
 
       onSaved: ( value) {
         _medications = value!;
@@ -167,8 +193,21 @@ class FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Personal information")),
-      body: SingleChildScrollView(
+      appBar: AppBar(title: Text("Personal information",style:TextStyle(color:Colors.orange),),backgroundColor: Colors.white,),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color.fromARGB(255, 238, 153, 25),
+          Color.fromARGB(255, 236, 53, 21)
+          ],
+          )
+        ),
+      child:SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(24),
           child: Form(
@@ -183,11 +222,12 @@ class FormScreenState extends State<FormScreen> {
                 _buildLivesAlone(),
                 _buildDiseases(),
                 _buildMedications(),
-                SizedBox(height: 100),
+                SizedBox(height: 80),
                 RaisedButton(
+                  color: Colors.white,
                   child: Text(
                     'Submit',
-                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                    style: TextStyle(color: Colors.red, fontSize: 16),
                   ),
                   onPressed: () {
                      if (!_formKey.currentState!.validate()) {
@@ -247,6 +287,7 @@ class FormScreenState extends State<FormScreen> {
           ),
         ),
       ),
+    )
     );
   }
 
