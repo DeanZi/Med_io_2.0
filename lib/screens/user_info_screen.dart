@@ -313,33 +313,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     );
   }
 
-  List<String> DataFix(){
-    List <String> Fixed =[" "];
-    if (data!=null){
-      Fixed = data.toString().split(" ");
-    }
-    var tmp;
-    List<String> list = [" "];
-    for(var i = 0; i < Fixed.length; i++){
-
-      try {
-        tmp = double.parse(Fixed[i]);
-        if(tmp>=20 &&tmp<=200)
-          list.add(tmp.toString());
-      }  on Exception catch (_) {
-        print('never reached');
-        continue;
-      }
-
-    }
-    //print(list);
-    return list;
-
-  }
 
   Future<String> createAlbum() async {
-    print(DateTime.now().millisecondsSinceEpoch - 1800000);
-    print(DateTime.now().millisecondsSinceEpoch);
+
     final bodyMsg = jsonEncode({
       "startTimeMillis": 1624395600000,
       "endTimeMillis": DateTime.now().millisecondsSinceEpoch,
