@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/res/custom_colors.dart';
@@ -6,6 +8,10 @@ import 'package:medio2/utils/Dimensions.dart';
 import 'package:medio2/utils/authentication.dart';
 import 'package:medio2/widgets/app_bar_title.dart';
 import 'package:fit_kit/fit_kit.dart';
+import 'package:http/http.dart' as http;
+
+import '../globals.dart';
+
 
 class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({Key? key, required User user})
@@ -22,6 +28,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   late User _user;
   bool _isSigningOut = false;
   int currentIndex = 0;
+  var data;
+
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -45,7 +53,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   void initState() {
     _user = widget._user;
-
     super.initState();
   }
 
@@ -293,7 +300,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   ],
                 ),
                 onTap: () async {
-                  readData();
+                  //readData();
+                  createAlbum();
 
                   //await FitKit.read(DataType.HEART_RATE, dateFrom: dateFrom, dateTo: dateTo);
                 },
@@ -305,7 +313,83 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     );
   }
 
+  List<String> DataFix(){
+    List <String> Fixed =[" "];
+    if (data!=null){
+      Fixed = data.toString().split(" ");
+    }
+    var tmp;
+    List<String> list = [" "];
+    for(var i = 0; i < Fixed.length; i++){
 
+      try {
+        tmp = double.parse(Fixed[i]);
+        if(tmp>=20 &&tmp<=200)
+          list.add(tmp.toString());
+      }  on Exception catch (_) {
+        print('never reached');
+        continue;
+      }
+
+    }
+    //print(list);
+    return list;
+
+  }
+
+  Future<String> createAlbum() async {
+    print(DateTime.now().millisecondsSinceEpoch - 1800000);
+    print(DateTime.now().millisecondsSinceEpoch);
+    final bodyMsg = jsonEncode({
+      "startTimeMillis": 1624395600000,
+      "endTimeMillis": DateTime.now().millisecondsSinceEpoch,
+
+      "aggregateBy": [
+        {
+          "dataSourceId": "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"
+        }
+      ],
+      "bucketByTime": {
+        "durationMillis": 1800000,
+
+      },
+
+    });
+
+    final response = await http.post(
+      Uri.parse('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer '+ accessToken,
+        //'Authorization': 'Bearer ya29.a0AfH6SMAKy7qtorGSFtX84kCgQ30ji-c5EYNqXmjPjWk6i7cfK7j0fVbwPI83-g2Akmyn0jW2BpGZQvpNtG6MN0kLkqIN4VTgLCns1qbBsTPhkUWObz31iF7gHcZL7rmapUqHAY396EvANb8UhkScF37XiXca',
+
+    },
+      body:bodyMsg,
+    );
+    data = jsonDecode(response.body).toString().replaceAll(',', '');
+    //DataFix();
+    iterateJson(response.body);
+    //print(jsonDecode(response.body));
+    return jsonDecode(response.body).toString();
+  }
+
+
+  void iterateJson(String jsonStr) {
+    Map<String, dynamic> myMap = json.decode(jsonStr);
+    List<dynamic> entitlements = myMap["bucket"];
+    int pulse = -1 ;
+    entitlements.forEach((entitlement) {
+      (entitlement as Map<String, dynamic>).forEach((key, value) {
+        if(key == "dataset"){
+          if(value[0]["point"].toString() != [].toString())
+            pulse = (value[0]["point"][0]["value"][0]["fpVal"]).round();
+        }
+
+      });
+
+    });
+    print(pulse);
+  }
 
   Future<bool> readPermissions() async {
     try {
