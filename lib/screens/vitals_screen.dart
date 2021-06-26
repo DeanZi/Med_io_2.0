@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medio2/globals.dart' as globals;
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter_spinbox/material.dart';
+
+import '../globals.dart';
+
 class VitalsScreen extends StatefulWidget {
   const VitalsScreen({Key? key, required User user})
       : _user = user,
@@ -19,6 +23,8 @@ class _VitalsScreenState extends State<VitalsScreen> {
   late double _feeling;
   late String _BR;
   late User _user;
+  late String _pulse;
+
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -40,6 +46,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   }
 
   Widget _buildGeneralFeeling() {
+    _getHeartRateFromGoogle().then((value) => _pulse = value);
     return SpinBox(
       decoration: InputDecoration(labelText: 'General Feeling 0-5'),
       min: 1,
@@ -110,48 +117,27 @@ class _VitalsScreenState extends State<VitalsScreen> {
                     'Submit',
                     style: TextStyle(color: Colors.red, fontSize: 16),
                   ),
-                  onPressed: () {
+                   onPressed: ()  {
                     print(_feeling);
                     if (!_formKey.currentState!.validate()) {
                       return;
                     }
-
                     _formKey.currentState!.save();
-
-                    // FirebaseFirestore.instance
-                    //     .collection('patient_test')
-                    //     .add({
-                    //   'disease': _diseases,
-                    //   'gender': _sex,
-                    //   'lives_alone': _livesAlone,
-                    //   'medication': _medications,
-                    //   'vitals': _vitals,
-                    // }).then((value) => id = value.id);
 
                     var list = [{
                       'bodyTemp': _BodyTemp,
                       'generalFeeling': _feeling,
                       'breathingRate': _BR,
-                      'heartRate': "70",
+                      'heartRate': _pulse,
                       'oxygen': "95",
                       'date_time': new DateTime.now().toUtc().toString()
                     }];
                     FirebaseFirestore.instance
-                        .collection('patient_test')
+                        .collection('patients')
                         .doc(_user.uid)
                         .update({"vitals": FieldValue.arrayUnion(list)});
 
-                    // Navigator.of(context).pushReplacement(
-                    //   MaterialPageRoute(
-                    //     builder: (context) =>
-                    //         DashboardScreen(id: _id,
-                    //           user: _user,
-                    //         ),
-                    //   ),
-                    // );
 
-                    //userSetup(user);
-                    //Send to API
                   },
                 )
               ],
@@ -162,4 +148,64 @@ class _VitalsScreenState extends State<VitalsScreen> {
       ),
     );
   }
+
+ Future<String> _getHeartRateFromGoogle() async {
+
+    final bodyMsg = jsonEncode({
+      "startTimeMillis": 1624395600000,
+      "endTimeMillis": DateTime.now().millisecondsSinceEpoch,
+
+      "aggregateBy": [
+        {
+          "dataSourceId": "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"
+        }
+      ],
+      "bucketByTime": {
+        "durationMillis": 1800000,
+
+      },
+
+    });
+
+    final response = await http.post(
+      Uri.parse('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer '+ accessToken,
+        //'Authorization': 'Bearer ya29.a0AfH6SMAKy7qtorGSFtX84kCgQ30ji-c5EYNqXmjPjWk6i7cfK7j0fVbwPI83-g2Akmyn0jW2BpGZQvpNtG6MN0kLkqIN4VTgLCns1qbBsTPhkUWObz31iF7gHcZL7rmapUqHAY396EvANb8UhkScF37XiXca',
+
+      },
+      body:bodyMsg,
+    );
+
+    int pulse = iterateJson(response.body);
+    if(pulse == -1)
+      _pulse = "N/A";
+    else
+      _pulse = pulse.toString();
+    //print(jsonDecode(response.body));
+    return _pulse;
+  }
+
+
+  int iterateJson(String jsonStr) {
+    Map<String, dynamic> myMap = json.decode(jsonStr);
+    List<dynamic> entitlements = myMap["bucket"];
+    int pulse = -1 ;
+    entitlements.forEach((entitlement) {
+      (entitlement as Map<String, dynamic>).forEach((key, value) {
+        if(key == "dataset"){
+          if(value[0]["point"].toString() != [].toString())
+            pulse = (value[0]["point"][0]["value"][0]["fpVal"]).round();
+        }
+
+      });
+
+    });
+
+    //print(pulse);
+    return pulse;
+  }
+
+
 }

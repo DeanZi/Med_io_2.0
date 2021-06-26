@@ -80,8 +80,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return VitalsScreen(user: _user);
       case 2:
         return EmergencyScreen(user: _user);
-      case 3:
-        return FormScreen(user: _user, id: _id);
+     // case 3:
+        //return FormScreen(user: _user, id: _id);
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +6,7 @@ import 'package:medio2/screens/sign_in_screen.dart';
 import 'package:medio2/utils/Dimensions.dart';
 import 'package:medio2/utils/authentication.dart';
 import 'package:medio2/widgets/app_bar_title.dart';
-import 'package:fit_kit/fit_kit.dart';
-import 'package:http/http.dart' as http;
 
-import '../globals.dart';
 
 
 class UserInfoScreen extends StatefulWidget {
@@ -300,10 +296,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   ],
                 ),
                 onTap: () async {
-                  //readData();
-                  createAlbum();
 
-                  //await FitKit.read(DataType.HEART_RATE, dateFrom: dateFrom, dateTo: dateTo);
                 },
               ),
             );
@@ -311,131 +304,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         ),
       ),
     );
-  }
-
-
-  Future<String> createAlbum() async {
-
-    final bodyMsg = jsonEncode({
-      "startTimeMillis": 1624395600000,
-      "endTimeMillis": DateTime.now().millisecondsSinceEpoch,
-
-      "aggregateBy": [
-        {
-          "dataSourceId": "derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm"
-        }
-      ],
-      "bucketByTime": {
-        "durationMillis": 1800000,
-
-      },
-
-    });
-
-    final response = await http.post(
-      Uri.parse('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer '+ accessToken,
-        //'Authorization': 'Bearer ya29.a0AfH6SMAKy7qtorGSFtX84kCgQ30ji-c5EYNqXmjPjWk6i7cfK7j0fVbwPI83-g2Akmyn0jW2BpGZQvpNtG6MN0kLkqIN4VTgLCns1qbBsTPhkUWObz31iF7gHcZL7rmapUqHAY396EvANb8UhkScF37XiXca',
-
-    },
-      body:bodyMsg,
-    );
-    data = jsonDecode(response.body).toString().replaceAll(',', '');
-    //DataFix();
-    iterateJson(response.body);
-    //print(jsonDecode(response.body));
-    return jsonDecode(response.body).toString();
-  }
-
-
-  void iterateJson(String jsonStr) {
-    Map<String, dynamic> myMap = json.decode(jsonStr);
-    List<dynamic> entitlements = myMap["bucket"];
-    int pulse = -1 ;
-    entitlements.forEach((entitlement) {
-      (entitlement as Map<String, dynamic>).forEach((key, value) {
-        if(key == "dataset"){
-          if(value[0]["point"].toString() != [].toString())
-            pulse = (value[0]["point"][0]["value"][0]["fpVal"]).round();
-        }
-
-      });
-
-    });
-    print(pulse);
-  }
-
-  Future<bool> readPermissions() async {
-    try {
-      final responses = await FitKit.hasPermissions([
-        DataType.HEART_RATE,
-
-      ]);
-
-      if (!responses) {
-        print("GIVENNNNNNNN");
-        await FitKit.readLast(DataType.HEART_RATE).then((value) => print(value.value));
-        final value = await FitKit.requestPermissions([
-          DataType.HEART_RATE,
-
-        ]);
-
-        return value;
-      } else {
-        return true;
-      }
-    } on UnsupportedException catch (e) {
-      // thrown in case e.dataType is unsupported
-      print(e);
-      return false;
-    }
-  }
-  void readData() async {
-    bool permissionsGiven = await readPermissions();
-
-    if (permissionsGiven) {
-      DateTime current = DateTime.now();
-      DateTime dateFrom;
-      DateTime dateTo;
-      if (false) {
-        dateFrom = DateTime.now().subtract(Duration(
-          hours: current.hour + 24,
-          minutes: current.minute,
-          seconds: current.second,
-        ));
-        dateTo = dateFrom.add(Duration(
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        ));
-      } else {
-        // 17 Jan 2021 12:53:64 - 12:53:5
-        dateFrom = current.subtract(Duration(
-          hours: current.hour,
-          minutes: current.minute +30,
-          seconds: current.second,
-        ));
-        dateTo = DateTime.now();
-      }
-
-      for (DataType type in DataType.values) {
-        try {
-          final results = await FitKit.read(
-            type,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
-          );
-
-          print(type);
-          print(results);
-          //addWidget(type, results);
-        } on Exception catch (ex) {
-          print(ex);
-        }
-      }
-    }
   }
 
 }

@@ -56,7 +56,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                               .collection('emergencyCall')
                               .doc(_user.uid)
                               .set({
-                            'date_time' : DateTime.now().toUtc(),
+                            'date_time' : DateTime.now().millisecondsSinceEpoch,
                             'firstName' : _firstName,
                             'lastName' : _lastName,
                           });
