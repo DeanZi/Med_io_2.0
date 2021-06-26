@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_spinbox/material.dart';
 
 import '../globals.dart';
+import 'dashboard_screen.dart';
 
 class VitalsScreen extends StatefulWidget {
   const VitalsScreen({Key? key, required User user})
@@ -24,6 +25,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   late String _BR;
   late User _user;
   late String _pulse;
+  late bool _sendSubmit;
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -81,6 +83,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   @override
   void initState() {
     _user = widget._user;
+    _sendSubmit = false;
     super.initState();
   }
 
@@ -159,10 +162,16 @@ class _VitalsScreenState extends State<VitalsScreen> {
                         .collection('patients')
                         .doc(_user.uid)
                         .update({"vitals": FieldValue.arrayUnion(list)});
-
-
+                    setState(() {
+                      _sendSubmit = true;
+                    });
                   },
-                )
+                ),
+                SizedBox(height: 20),
+
+                _sendSubmit?
+                Container(
+                  child: Text('Thank you for submit!',style: TextStyle(color:Colors.black, fontSize: 20),),) : Container(),
               ],
             ),
           ),

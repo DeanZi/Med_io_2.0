@@ -54,6 +54,17 @@ class _SignInScreenState extends State<SignInScreen> {
                         fontSize: 40,
                       ),
                     ),
+                    SizedBox(height: 30),
+                  Text(
+                  'In order to use the Med.io \n app you must have a smart band \n and connect it to google fit',
+
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 18,
+
+                  ),
+                  ),
                   ],
                 ),
               ),
