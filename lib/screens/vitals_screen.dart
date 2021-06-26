@@ -31,7 +31,16 @@ class _VitalsScreenState extends State<VitalsScreen> {
   Widget _buildTemp() {
     _getHeartRateFromGoogle().then((value) => _pulse = value);
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Body Temperature'),
+      style: TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: 'Body Temperature',
+        labelStyle: TextStyle(color: Colors.black,),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      ),
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value!.isEmpty) {
@@ -48,10 +57,23 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
   Widget _buildGeneralFeeling() {
     return SpinBox(
-      decoration: InputDecoration(labelText: 'General Feeling 0-5'),
+      textStyle: TextStyle(color:Colors.black, fontSize: 18),
+      decoration: InputDecoration(
+          labelText: 'General Feeling 0-5',
+        labelStyle: TextStyle(color: Colors.black,fontSize: 22,),
+        enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        ),
+        focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        ),
+      ),
       min: 1,
       max: 5,
       value: 3,
+      spacing: 10,
+      incrementIcon: Icon(Icons.keyboard_arrow_up, size: 40,color: Colors.red,),
+      decrementIcon: Icon(Icons.keyboard_arrow_down, size: 40,color: Colors.red),
       onChanged: (value) {_feeling = value;},
     );
   }
@@ -64,7 +86,16 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
   Widget _buildBreathingRate() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Breathing Rate'),
+        style: TextStyle(color: Colors.black),
+    decoration: InputDecoration(
+    labelText: 'Breathing Rate',
+    labelStyle: TextStyle(color: Colors.black),
+    enabledBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: Colors.black),
+    ),focusedBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: Colors.red),
+      ),
+    ),
       keyboardType: TextInputType.number,
       validator: (value) {
         if (value!.isEmpty) {
@@ -82,24 +113,12 @@ class _VitalsScreenState extends State<VitalsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Personal information",
-                style:TextStyle(color:Colors.orange),)
-                ,backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text("Collect Vitals",
+                style:TextStyle(color:Colors.white),)
+                ,backgroundColor: Color(0xFFCE0606),
                 ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Color.fromARGB(255, 238, 153, 25),
-          Color.fromARGB(255, 236, 53, 21)
-        ],
-        )
-    ),
-    child: SingleChildScrollView(
+      body:  SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(24),
           child: Form(
@@ -108,14 +127,18 @@ class _VitalsScreenState extends State<VitalsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _buildTemp(),
+                SizedBox(height: 20),
+
                 _buildBreathingRate(),
+                SizedBox(height: 20),
+
                 _buildGeneralFeeling(),
                 SizedBox(height: 80),
                 RaisedButton(
-                  color: Colors.white,
+                  color: Colors.red,
                   child: Text(
                     'Submit',
-                    style: TextStyle(color: Colors.red, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                    onPressed: ()  {
                     print(_feeling);
@@ -144,7 +167,6 @@ class _VitalsScreenState extends State<VitalsScreen> {
             ),
           ),
         ),
-      ),
       ),
     );
   }

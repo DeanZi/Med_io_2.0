@@ -15,7 +15,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.firebaseNavy,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
@@ -35,7 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Flexible(
                       flex: 1,
                       child: Image.asset(
-                        'assets/search_bg.png',
+                        'assets/heart.png',
                         height: 160,
                       ),
                     ),
@@ -48,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     Text(
-                      'Med.io 2.0',
+                      'Med.io',
                       style: TextStyle(
                         color: CustomColors.firebaseOrange,
                         fontSize: 40,
