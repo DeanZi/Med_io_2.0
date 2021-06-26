@@ -45,8 +45,18 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildFirstName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'First Name',filled: true),
-        validator: ( value) {
+      style: TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: 'First Name',
+        labelStyle: TextStyle(color: Colors.black),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      ),
+
+      validator: ( value) {
 
 
         if (value!.isEmpty) {
@@ -63,7 +73,16 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildLastName() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Last Name',filled: true),
+      style: TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: 'Last Name',
+        labelStyle: TextStyle(color: Colors.black),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      ),
       validator: ( value) {
 
 
@@ -85,7 +104,17 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildAge() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Age', filled: true),
+      style: TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: 'Age',
+        labelStyle: TextStyle(color: Colors.black),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      ),
+
       keyboardType: TextInputType.number,
     validator: (value) {
     if (value!.isEmpty) {
@@ -105,7 +134,14 @@ class FormScreenState extends State<FormScreen> {
   }
 
   Widget _buildSex() {
-    return DropDownFormField(
+    return Theme(
+        data: new ThemeData(
+        canvasColor: Colors.white,
+        primaryColor: Colors.black,
+        accentColor: Colors.black,
+        hintColor: Colors.black,
+        ),
+    child:DropDownFormField(
         titleText:'Sex',
         value: _sex,
         onSaved: (value) {
@@ -134,10 +170,17 @@ class FormScreenState extends State<FormScreen> {
         ],
       textField: 'display',
       valueField: 'value',
+    )
     );
   }
   Widget _buildLivesAlone() {
-    return DropDownFormField(
+    return Theme(
+        data: new ThemeData(
+        canvasColor: Colors.white,
+        primaryColor: Colors.black,
+        accentColor: Colors.black,
+        hintColor: Colors.black),
+    child:DropDownFormField(
       titleText:'Do you live alone?',
       value: _livesAlone,
       onSaved: (value) {
@@ -162,16 +205,23 @@ class FormScreenState extends State<FormScreen> {
       ],
       textField: 'display',
       valueField: 'value',
+    )
     );
   }
 
 
   Widget _buildDiseases() {
     return TextFormField(
-
-      decoration: InputDecoration(labelText: 'Diseases',filled: true,
-          ),
-
+      style: TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: 'Diseases',
+        labelStyle: TextStyle(color: Colors.black),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      ),
       onSaved: ( value) {
         _diseases = value!;
       },
@@ -180,8 +230,16 @@ class FormScreenState extends State<FormScreen> {
 
   Widget _buildMedications() {
     return TextFormField(
-      decoration: InputDecoration(labelText: 'Medications',filled: true),
-
+        style: TextStyle(color: Colors.black),
+    decoration: InputDecoration(
+    labelText: 'Medications',
+    labelStyle: TextStyle(color: Colors.black),
+    enabledBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: Colors.black),
+    ),focusedBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: Colors.red),
+    ),
+    ),
       onSaved: ( value) {
         _medications = value!;
       },
@@ -193,21 +251,11 @@ class FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Personal information",style:TextStyle(color:Colors.orange),),backgroundColor: Colors.white,),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Color.fromARGB(255, 238, 153, 25),
-          Color.fromARGB(255, 236, 53, 21)
-          ],
-          )
-        ),
-      child:SingleChildScrollView(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text("Personal information",
+        style:TextStyle(color:Colors.white),),
+        backgroundColor: Color(0xFFCE0606),),
+      body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(24),
           child: Form(
@@ -224,10 +272,10 @@ class FormScreenState extends State<FormScreen> {
                 _buildMedications(),
                 SizedBox(height: 80),
                 RaisedButton(
-                  color: Colors.white,
+                  color: Colors.red,
                   child: Text(
                     'Submit',
-                    style: TextStyle(color: Colors.red, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   onPressed: () {
                      if (!_formKey.currentState!.validate()) {
@@ -287,7 +335,6 @@ class FormScreenState extends State<FormScreen> {
           ),
         ),
       ),
-    )
     );
   }
 

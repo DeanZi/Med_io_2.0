@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/screens/sign_in_screen.dart';
@@ -52,261 +53,141 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.firebaseNavy,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: CustomColors.firebaseNavy,
-        title: AppBarTitle(),
+        backgroundColor: Color(0xFFCE0606),
+       elevation: 0,
+        title: Text('Med.io',style: TextStyle(color: Colors.white),),
+        actions: <Widget>[
+         IconButton(
+           icon: Icon(
+            Icons.logout,
+            color: Colors.white,
+          ),
+          onPressed: () async {
+            setState(() {
+              _isSigningOut = true;
+            });
+            await Authentication.signOut(context: context);
+            setState(() {
+              _isSigningOut = false;
+            });
+            Navigator.of(context)
+                .pushReplacement(_routeToSignInScreen());
+            },
+        ),
+        ]
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: 300.0,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Center(child:
+            Column(
             children: [
-              Row(),
-              _user.photoURL != null
-                  ? ClipOval(
-                      child: Material(
-                        color: CustomColors.firebaseGrey.withOpacity(0.3),
-                        child: Image.network(
-                          _user.photoURL!,
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    )
-                  : ClipOval(
-                      child: Material(
-                        color: CustomColors.firebaseGrey.withOpacity(0.3),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Icon(
-                            Icons.person,
-                            size: 60,
-                            color: CustomColors.firebaseGrey,
-                          ),
-                        ),
-                      ),
-                    ),
-              SizedBox(height: 16.0),
-              Text(
-                'Hello',
-                style: TextStyle(
-                  color: CustomColors.firebaseGrey,
-                  fontSize: 26,
-                ),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                _user.displayName!,
-                style: TextStyle(
-                  color: CustomColors.firebaseYellow,
-                  fontSize: 26,
-                ),
-              ),
-              // SizedBox(height: 5.0),
-              // Text(
-              //   '( ${_user.email!} )',
-              //   style: TextStyle(
-              //     color: CustomColors.firebaseOrange,
-              //     fontSize: 20,
-              //     letterSpacing: 0.5,
-              //   ),
-              //),
-              // SizedBox(height: 24.0),
-              // Text(
-              //   'You are now signed in using your Google account. To sign out of your account click the "Sign Out" button below.',
-              //   style: TextStyle(
-              //       color: CustomColors.firebaseGrey.withOpacity(0.8),
-              //       fontSize: 14,
-              //       letterSpacing: 0.2),
-              // ),
-              SizedBox(height: 8.0),
-              _isSigningOut
-                  ? CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    )
-                  : ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          Colors.redAccent,
-                        ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          _isSigningOut = true;
-                        });
-                        await Authentication.signOut(context: context);
-                        setState(() {
-                          _isSigningOut = false;
-                        });
-                        Navigator.of(context)
-                            .pushReplacement(_routeToSignInScreen());
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        child: Text(
-                          'Sign Out',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-              bodyWidget(context),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                _user.photoURL != null
+                    ? ClipOval(
+                  child: Material(
 
+                    color: CustomColors.firebaseGrey.withOpacity(0.3),
+                    child: Image.network(
+                      _user.photoURL!,
+                      height: 35,
+                      width: 35,
+                      fit: BoxFit.fitHeight,
+
+                    ),
+                  ),
+                )
+                    : ClipOval(
+                  child: Material(
+                    color: CustomColors.firebaseGrey.withOpacity(0.3),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Icon(
+                        Icons.person,
+                        size: 30,
+                        color: CustomColors.firebaseGrey,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8.0),
+                Text(
+                  'Hello,',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                  ),
+                ),
+                SizedBox(width: 8.0),
+                Text(
+                  _user.displayName!,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                  ),
+                ),
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Container(child: Image.asset('assets/heart.png',  height: 120.0,width: 120.0,
+                fit: BoxFit.cover,),),
+              SizedBox(height: 40.0),
+              bodyWidget(context),
             ],
+            ),
           ),
         ),
-      ),
     );
   }
 
   bodyWidget(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: Dimensions.heightSize / 8),
-      child: Container(
-        width: MediaQuery.of(context).size.width / 1.4,
-        height: MediaQuery.of(context).size.height / 1.4,
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: Dimensions.marginSize,
-                right: Dimensions.marginSize,
-                top: Dimensions.heightSize,
+    return Container(child: Center(
+      child:Column(
+        children: [
+          // Heart rate:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('70',style: TextStyle(color:Colors.black,fontSize: 65)),//TODO change for parameter.
+              SizedBox(width: 15.0),
+              Text('BPM',style: TextStyle(color:Colors.black,fontSize: 20),),
+            ],
+          ),
+          SizedBox(height: 20.0),
+          // General feeling
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 15.0),
+              Text('4',style: TextStyle(color:Colors.black,fontSize: 65)),//TODO change for parameter.
+              SizedBox(width: 15.0),
+              Column(
+
+                children: [
+                  Text('General',style: TextStyle(color:Colors.black,fontSize: 20),),
+                  Text('Feeling',style: TextStyle(color:Colors.black,fontSize: 20),),
+                ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize * 2,
-                    right: Dimensions.marginSize * 2,
-                  ),
-                  // child: Text(
-                  //   _user.displayName!,
-                  //   style: TextStyle(
-                  //     color: CustomColors.firebaseYellow,
-                  //     fontSize: 26,
-                  //   ),
-                  // ),
-                ),
-                SizedBox(
-                  height: Dimensions.heightSize * 2,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: Dimensions.marginSize * 2,
-                    right: Dimensions.marginSize * 2,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Dimensions.heightSize * 2,
-            ),
-            detailsWidget(context)
-          ],
-        ),
-      ),
+            ],
+          ),
+          SizedBox(height: 20.0),
+          //Body Temperature
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('37',style: TextStyle(color:Colors.black,fontSize: 65)),//TODO change for parameter.
+              SizedBox(width: 15.0),
+              Text('°C',style: TextStyle(color:Colors.black,fontSize: 20),),
+            ],
+          ),
+            ],
+        )
+      )
     );
   }
-
-  detailsWidget(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: Dimensions.marginSize,
-        right: Dimensions.marginSize,
-      ),
-      child: Container(
-        height: 200,
-        width: MediaQuery.of(context).size.width,
-        child: ListView.builder(
-          itemCount: 1,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(
-                  left: Dimensions.widthSize,
-                  right: Dimensions.widthSize,
-                  top: 10,
-                  bottom: 10),
-              child: GestureDetector(
-                child: DataTable(
-                  columns: const <DataColumn>[
-                    DataColumn(
-                      label: Text(
-                        'Time',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Heart Rate',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Saturation',
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                      ),
-                    ),
-                  ],
-                  rows: const <DataRow>[
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Mohit')),
-                        DataCell(Text('23')),
-                        DataCell(Text('Associate Software Developer')),
-                      ],
-                    ),
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Akshay')),
-                        DataCell(Text('25')),
-                        DataCell(Text('Software Developer')),
-                      ],
-                    ),
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('Deepak')),
-                        DataCell(Text('29')),
-                        DataCell(Text('Team Lead ')),
-                      ],
-                    ),
-                  ],
-                ),
-                onTap: () async {
-                  readData();
-
-                  //await FitKit.read(DataType.HEART_RATE, dateFrom: dateFrom, dateTo: dateTo);
-                },
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-
-
   Future<bool> readPermissions() async {
     try {
       final responses = await FitKit.hasPermissions([

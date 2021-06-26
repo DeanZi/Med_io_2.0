@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medio2/screens/about_screen.dart';
 import 'package:medio2/screens/vitals_screen.dart';
 import 'package:medio2/screens/emergency_screen.dart';
 import 'package:medio2/screens/quetionnaire_screen.dart';
@@ -31,32 +32,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF4285F4),
+      //backgroundColor: Color(0xFFCE0606),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home,color: Colors.white),
             label: 'Home',
-            backgroundColor: Color(0xFFECEFF1),
+            backgroundColor: Color(0xFFCE0606),
+
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.perm_identity_outlined),
+            icon: Icon(Icons.perm_identity_outlined, color: Colors.white,),
             label: 'Vitals',
-            backgroundColor: Color(0xFFECEFF1),
+            backgroundColor: Color(0xFFCE0606),
+
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_hospital_rounded),
+            icon: Icon(Icons.local_hospital_rounded, color: Colors.white,),
             label: 'SOS',
-            backgroundColor: Color(0xFFECEFF1),
+            backgroundColor: Color(0xFFCE0606),
+
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-            backgroundColor: Color(0xFFECEFF1),
+            icon: Icon(Icons.announcement_outlined,color: Colors.white,),
+            label: 'About',
+            backgroundColor: Color(0xFFCE0606),
+
           ),
         ],
         currentIndex: currentIndex,
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.white,
         onTap: _onTapIndex,
       ),
       body: goToScreen(currentIndex),
@@ -81,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 2:
         return EmergencyScreen();
       case 3:
-        return FormScreen(user: _user, id: _id);
+        return AboutScreen();
     }
   }
 }
