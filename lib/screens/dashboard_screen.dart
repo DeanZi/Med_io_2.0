@@ -82,11 +82,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 0:
         return UserInfoScreen(user: _user);
       case 1:
-        return VitalsScreen(user: _user, id: _id);
+        return VitalsScreen(user: _user);
       case 2:
         return EmergencyScreen();
       case 3:
         return AboutScreen();
+
     }
   }
 }

@@ -293,7 +293,7 @@ class FormScreenState extends State<FormScreen> {
 
 
                      FirebaseFirestore.instance
-                         .collection('patient_test')
+                         .collection('patients')
                          .doc(_user.uid)
                          .set({'age':_age,
                        'disease' :_diseases,
@@ -340,7 +340,7 @@ class FormScreenState extends State<FormScreen> {
 
   updateItemID(String id) {
      globals.itemID = id;
-    FirebaseFirestore.instance.collection('patient_test').doc(id).update({'itemID':id});
+    FirebaseFirestore.instance.collection('patients').doc(id).update({'itemID':id});
 
   }
 }

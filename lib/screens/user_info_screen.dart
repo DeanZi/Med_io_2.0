@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,8 @@ import 'package:medio2/screens/sign_in_screen.dart';
 import 'package:medio2/utils/Dimensions.dart';
 import 'package:medio2/utils/authentication.dart';
 import 'package:medio2/widgets/app_bar_title.dart';
-import 'package:fit_kit/fit_kit.dart';
+
+
 
 class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({Key? key, required User user})
@@ -23,6 +25,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   late User _user;
   bool _isSigningOut = false;
   int currentIndex = 0;
+  var data;
+
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -46,7 +50,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   void initState() {
     _user = widget._user;
-
     super.initState();
   }
 
@@ -169,7 +172,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 children: [
                   Text('General',style: TextStyle(color:Colors.black,fontSize: 20),),
                   Text('Feeling',style: TextStyle(color:Colors.black,fontSize: 20),),
-                ],
+                ], 
               ),
             ],
           ),
@@ -187,76 +190,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         )
       )
     );
-  }
-  Future<bool> readPermissions() async {
-    try {
-      final responses = await FitKit.hasPermissions([
-        DataType.HEART_RATE,
-
-      ]);
-
-      if (!responses) {
-        print("GIVENNNNNNNN");
-        await FitKit.readLast(DataType.HEART_RATE).then((value) => print(value.value));
-        final value = await FitKit.requestPermissions([
-          DataType.HEART_RATE,
-
-        ]);
-
-        return value;
-      } else {
-        return true;
-      }
-    } on UnsupportedException catch (e) {
-      // thrown in case e.dataType is unsupported
-      print(e);
-      return false;
-    }
-  }
-  void readData() async {
-    bool permissionsGiven = await readPermissions();
-
-    if (permissionsGiven) {
-      DateTime current = DateTime.now();
-      DateTime dateFrom;
-      DateTime dateTo;
-      if (false) {
-        dateFrom = DateTime.now().subtract(Duration(
-          hours: current.hour + 24,
-          minutes: current.minute,
-          seconds: current.second,
-        ));
-        dateTo = dateFrom.add(Duration(
-          hours: 23,
-          minutes: 59,
-          seconds: 59,
-        ));
-      } else {
-        // 17 Jan 2021 12:53:64 - 12:53:5
-        dateFrom = current.subtract(Duration(
-          hours: current.hour,
-          minutes: current.minute +30,
-          seconds: current.second,
-        ));
-        dateTo = DateTime.now();
-      }
-
-      for (DataType type in DataType.values) {
-        try {
-          final results = await FitKit.read(
-            type,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
-          );
-
-          print(type);
-          print(results);
-          //addWidget(type, results);
-        } on Exception catch (ex) {
-          print(ex);
-        }
-      }
-    }
   }
 
 }
