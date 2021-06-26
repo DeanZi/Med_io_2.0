@@ -29,6 +29,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildTemp() {
+    _getHeartRateFromGoogle().then((value) => _pulse = value);
     return TextFormField(
       decoration: InputDecoration(labelText: 'Body Temperature'),
       keyboardType: TextInputType.number,
@@ -46,7 +47,6 @@ class _VitalsScreenState extends State<VitalsScreen> {
   }
 
   Widget _buildGeneralFeeling() {
-    _getHeartRateFromGoogle().then((value) => _pulse = value);
     return SpinBox(
       decoration: InputDecoration(labelText: 'General Feeling 0-5'),
       min: 1,
