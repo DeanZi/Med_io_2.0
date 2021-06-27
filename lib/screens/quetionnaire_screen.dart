@@ -23,6 +23,7 @@ class FormScreen extends StatefulWidget {
 class FormScreenState extends State<FormScreen> {
   late String _firstName;
   late String _lastName;
+  late String _phoneNumber;
   late String _age;
   late String _sex;
   late String _livesAlone ='';
@@ -120,18 +121,48 @@ class FormScreenState extends State<FormScreen> {
     if (value!.isEmpty) {
       return 'Valid age is Required';
     }
-
+    var value_int = int.parse(value);
+    if (value_int>120 || value_int<0){
+      return 'Age is not valid';
+    }
     return null;
     },
     onSaved: (value) {
     _age = value!;
     },
     );
-
-
-
-
   }
+
+
+  Widget _buildPhoneNumber(){
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      validator: (value) {
+      if (value!.isEmpty) {
+        return 'Phone number is Required';
+      }
+      if (value.length != 10 ){
+        return 'Phone number is not valid';
+      }
+
+      return null;
+    },
+      style: TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        labelText: 'Phone Number',
+        labelStyle: TextStyle(color: Colors.black),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+      ),
+      onSaved: ( value) {
+        _phoneNumber = value!;
+      },
+    );
+  }
+
 
   Widget _buildSex() {
     return Theme(
@@ -265,6 +296,7 @@ class FormScreenState extends State<FormScreen> {
               children: <Widget>[
                 _buildFirstName(),
                 _buildLastName(),
+                _buildPhoneNumber(),
                 _buildAge(),
                 _buildSex(),
                 _buildLivesAlone(),
@@ -298,6 +330,7 @@ class FormScreenState extends State<FormScreen> {
                          .set({'age':_age,
                        'disease' :_diseases,
                        'firstName' : _firstName,
+                       'phoneNumber' : _phoneNumber,
                        'gender' : _sex,
                        'lastName' : _lastName,
                        'lives_alone' : _livesAlone,
