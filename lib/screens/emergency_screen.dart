@@ -24,9 +24,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
 
   int currentIndex = 0;
   late User _user;
+  late bool _pushTheButton;
+
   @override
   void initState() {
     _user = widget._user;
+    _pushTheButton = false;
     super.initState();
   }
 
@@ -62,10 +65,19 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                             'firstName' : _firstName,
                             'lastName' : _lastName,
                           });
+                          setState(() {
+                            _pushTheButton = true;
+                          });
                         },
-
                         child: Image.asset('assets/sos.png'),
                      ),
+                    SizedBox(height: 20),
+                    _pushTheButton?
+                    Container(
+                        child: Text('We\'ve received your emergency call!',
+                          style: TextStyle(color:Colors.black, fontSize: 20),
+                        ),
+                    ) : Container(),
                 ]
               )
           )
