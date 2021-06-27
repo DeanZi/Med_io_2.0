@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:empty_widget/empty_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class VitalsScreen extends StatefulWidget {
 
 class _VitalsScreenState extends State<VitalsScreen> {
   late String _BodyTemp;
-  late double _feeling;
+  late int _feeling;
   late String _BR;
   late User _user;
   late String _pulse;
@@ -76,7 +77,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
       spacing: 10,
       incrementIcon: Icon(Icons.keyboard_arrow_up, size: 40,color: Colors.red,),
       decrementIcon: Icon(Icons.keyboard_arrow_down, size: 40,color: Colors.red),
-      onChanged: (value) {_feeling = value;},
+      onChanged: (value) {_feeling = value.toInt();},
     );
   }
 
@@ -113,6 +114,24 @@ class _VitalsScreenState extends State<VitalsScreen> {
     );
   }
 
+  // Widget _buildInfo() {
+  //   return EmptyWidget(
+  //     image: null,
+  //     packageImage: PackageImage.Image_3,
+  //     title: 'Update your info',
+  //     subTitle: 'We will extract your hear rate from google :)',
+  //     titleTextStyle: TextStyle(
+  //       fontSize: 22,
+  //       color: Color(0xff9da9c7),
+  //       fontWeight: FontWeight.w500,
+  //     ),
+  //     subtitleTextStyle: TextStyle(
+  //       fontSize: 14,
+  //       color: Color(0xffabb8d6),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,6 +148,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+               // _buildInfo(),
                 _buildTemp(),
                 SizedBox(height: 20),
 

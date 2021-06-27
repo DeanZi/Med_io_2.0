@@ -1,12 +1,13 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/screens/sign_in_screen.dart';
-import 'package:medio2/utils/Dimensions.dart';
 import 'package:medio2/utils/authentication.dart';
-import 'package:medio2/widgets/app_bar_title.dart';
+
+
 
 
 
@@ -26,7 +27,33 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   bool _isSigningOut = false;
   int currentIndex = 0;
   var data;
+  late String pulse = "N/A";
+  late String generalFeeling = "N/A";
+  late String bodyTemp = "N/A";
 
+
+
+  Future<String> updatePulse ()  {
+    return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
+      int lengthOfVitals = value.data()!["vitals"].length;
+      return value.data()!["vitals"][lengthOfVitals-1]["heartRate"];
+    });
+  }
+
+  Future<String> updateGeneralFeeling ()  {
+    return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
+      int lengthOfVitals = value.data()!["vitals"].length;
+      return value.data()!["vitals"][lengthOfVitals-1]["generalFeeling"].round().toString();
+    });
+  }
+
+  Future<String> updateBodyTemp ()  {
+    return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
+      int lengthOfVitals = value.data()!["vitals"].length;
+      print(value.data()!["vitals"][lengthOfVitals-1]["bodyTemp"]);
+      return value.data()!["vitals"][lengthOfVitals-1]["bodyTemp"];
+    });
+  }
 
   Route _routeToSignInScreen() {
     return PageRouteBuilder(
@@ -138,13 +165,41 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               Container(child: Image.asset('assets/heart.png',  height: 120.0,width: 120.0,
                 fit: BoxFit.cover,),),
               SizedBox(height: 40.0),
-              bodyWidget(context),
+              buildFetchData(context),
             ],
             ),
           ),
         ),
     );
   }
+
+  Widget buildFetchData(BuildContext context) {
+    return DefaultTextStyle(
+      style: Theme.of(context).textTheme.headline2!,
+      textAlign: TextAlign.justify,
+      child: FutureBuilder<String>(
+        future: updatePulse(), // a previously-obtained Future<String> or null
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          List<Widget> children;
+          if (generalFeeling !="N/A") {
+            updatePulse().then((value) => pulse = value);
+            updateGeneralFeeling().then((value) => generalFeeling = value);
+            updateBodyTemp().then((value) => bodyTemp = value);
+            return bodyWidget(context);
+          }else{
+            updatePulse().then((value) => pulse = value);
+            updateGeneralFeeling().then((value) => generalFeeling = value);
+            updateBodyTemp().then((value) => bodyTemp = value);
+            return CircularProgressIndicator();
+
+          }
+        },
+
+
+      ),
+    );
+  }
+
 
   bodyWidget(BuildContext context) {
     return Container(child: Center(
@@ -154,9 +209,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('70',style: TextStyle(color:Colors.black,fontSize: 65)),//TODO change for parameter.
+              Text( pulse ,style: TextStyle(color:Colors.black,fontSize: 65)),
               SizedBox(width: 15.0),
-              Text('BPM',style: TextStyle(color:Colors.black,fontSize: 20),),
+              Text('bpm',style: TextStyle(color:Colors.black,fontSize: 20),),
             ],
           ),
           SizedBox(height: 20.0),
@@ -165,7 +220,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(width: 15.0),
-              Text('4',style: TextStyle(color:Colors.black,fontSize: 65)),//TODO change for parameter.
+              Text(generalFeeling ,style: TextStyle(color:Colors.black,fontSize: 65)),
               SizedBox(width: 15.0),
               Column(
 
@@ -181,7 +236,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('37',style: TextStyle(color:Colors.black,fontSize: 65)),//TODO change for parameter.
+              Text(bodyTemp,style: TextStyle(color:Colors.black,fontSize: 65)),
               SizedBox(width: 15.0),
               Text('°C',style: TextStyle(color:Colors.black,fontSize: 20),),
             ],

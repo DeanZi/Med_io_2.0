@@ -29,6 +29,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     _user = widget._user;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +50,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     SizedBox(height: 10),
                     FlatButton(
                         onPressed: (){
+
                           var _fullName = _user.displayName.toString().split(" ");
                           var _firstName = _fullName[0];
                           var _lastName = _fullName[1];
@@ -61,6 +63,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                             'lastName' : _lastName,
                           });
                         },
+
                         child: Image.asset('assets/sos.png'),
                      ),
                 ]
