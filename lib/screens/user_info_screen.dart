@@ -34,9 +34,11 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   Future<String> updatePulse ()  {
     return FirebaseFirestore.instance.collection("patients").doc(_user.uid).get().then((value){
-      if(value.data()!["vitals"].length > 0) {
-        int lengthOfVitals = value.data()!["vitals"].length;
-        return value.data()!["vitals"][lengthOfVitals - 1]["heartRate"];
+      if(value.exists) {
+        if (value.data()!["vitals"].length > 0) {
+          int lengthOfVitals = value.data()!["vitals"].length;
+          return value.data()!["vitals"][lengthOfVitals - 1]["heartRate"];
+        }
       }
       return "N/A";
     });
@@ -44,11 +46,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   Future<String> updateGeneralFeeling ()  {
     return FirebaseFirestore.instance.collection("patients").doc(_user.uid).get().then((value){
-      if(value.data()!["vitals"].length > 0) {
-        int lengthOfVitals = value.data()!["vitals"].length;
-        return value.data()!["vitals"][lengthOfVitals - 1]["generalFeeling"]
-            .round()
-            .toString();
+      if(value.exists) {
+        if (value.data()!["vitals"].length > 0) {
+          int lengthOfVitals = value.data()!["vitals"].length;
+          return value.data()!["vitals"][lengthOfVitals - 1]["generalFeeling"]
+              .round()
+              .toString();
+        }
       }
       return "N/A";
     });
@@ -56,10 +60,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   Future<String> updateBodyTemp ()  {
     return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
-      if(value.data()!["vitals"].length > 0) {
-        int lengthOfVitals = value.data()!["vitals"].length;
-        print(value.data()!["vitals"][lengthOfVitals - 1]["bodyTemp"]);
-        return value.data()!["vitals"][lengthOfVitals - 1]["bodyTemp"];
+      if(value.exists) {
+        if (value.data()!["vitals"].length > 0) {
+          int lengthOfVitals = value.data()!["vitals"].length;
+          print(value.data()!["vitals"][lengthOfVitals - 1]["bodyTemp"]);
+          return value.data()!["vitals"][lengthOfVitals - 1]["bodyTemp"];
+        }
       }
       return "N/A";
     });
