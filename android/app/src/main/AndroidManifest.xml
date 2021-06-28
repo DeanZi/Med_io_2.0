@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.medio2">
    <application
-        android:label="medio2"
+       android:usesCleartextTraffic="true"
+       android:label="medio2"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:empty_widget/empty_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_spinbox/material.dart';
 
 import '../globals.dart';
-import 'dashboard_screen.dart';
 
 class VitalsScreen extends StatefulWidget {
   const VitalsScreen({Key? key, required User user})

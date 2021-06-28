@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:medio2/res/custom_colors.dart';
 import 'package:medio2/screens/sign_in_screen.dart';
 import 'package:medio2/utils/authentication.dart';
+import 'package:medio2/globals.dart';
 
 
 
@@ -27,31 +28,40 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   bool _isSigningOut = false;
   int currentIndex = 0;
   var data;
-  late String pulse = "N/A";
-  late String generalFeeling = "N/A";
-  late String bodyTemp = "N/A";
+
 
 
 
   Future<String> updatePulse ()  {
-    return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
-      int lengthOfVitals = value.data()!["vitals"].length;
-      return value.data()!["vitals"][lengthOfVitals-1]["heartRate"];
+    return FirebaseFirestore.instance.collection("patients").doc(_user.uid).get().then((value){
+      if(value.data()!["vitals"].length > 0) {
+        int lengthOfVitals = value.data()!["vitals"].length;
+        return value.data()!["vitals"][lengthOfVitals - 1]["heartRate"];
+      }
+      return "N/A";
     });
   }
 
   Future<String> updateGeneralFeeling ()  {
-    return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
-      int lengthOfVitals = value.data()!["vitals"].length;
-      return value.data()!["vitals"][lengthOfVitals-1]["generalFeeling"].round().toString();
+    return FirebaseFirestore.instance.collection("patients").doc(_user.uid).get().then((value){
+      if(value.data()!["vitals"].length > 0) {
+        int lengthOfVitals = value.data()!["vitals"].length;
+        return value.data()!["vitals"][lengthOfVitals - 1]["generalFeeling"]
+            .round()
+            .toString();
+      }
+      return "N/A";
     });
   }
 
   Future<String> updateBodyTemp ()  {
     return FirebaseFirestore.instance.collection("patients").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value){
-      int lengthOfVitals = value.data()!["vitals"].length;
-      print(value.data()!["vitals"][lengthOfVitals-1]["bodyTemp"]);
-      return value.data()!["vitals"][lengthOfVitals-1]["bodyTemp"];
+      if(value.data()!["vitals"].length > 0) {
+        int lengthOfVitals = value.data()!["vitals"].length;
+        print(value.data()!["vitals"][lengthOfVitals - 1]["bodyTemp"]);
+        return value.data()!["vitals"][lengthOfVitals - 1]["bodyTemp"];
+      }
+      return "N/A";
     });
   }
 
@@ -78,6 +88,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   void initState() {
     _user = widget._user;
     super.initState();
+    updatePulse().then((value) => pulse = value);
+    updateGeneralFeeling().then((value) => generalFeeling = value);
+    updateBodyTemp().then((value) => bodyTemp = value);
   }
 
   @override
@@ -180,19 +193,19 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       child: FutureBuilder<String>(
         future: updatePulse(), // a previously-obtained Future<String> or null
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          List<Widget> children;
-          if (generalFeeling !="N/A") {
-            updatePulse().then((value) => pulse = value);
-            updateGeneralFeeling().then((value) => generalFeeling = value);
-            updateBodyTemp().then((value) => bodyTemp = value);
-            return bodyWidget(context);
-          }else{
-            updatePulse().then((value) => pulse = value);
-            updateGeneralFeeling().then((value) => generalFeeling = value);
-            updateBodyTemp().then((value) => bodyTemp = value);
-            return CircularProgressIndicator();
+          // if(generalFeeling == "N/A") {
+          //   updatePulse().then((value) => pulse = value);
+          //   updateGeneralFeeling().then((value) => generalFeeling = value);
+          //   updateBodyTemp().then((value) => bodyTemp = value);
+          //   CircularProgressIndicator();
+          // }
+          return bodyWidget(context);
 
-          }
+
+          // else{
+          //   return CircularProgressIndicator();
+          //
+          // }
         },
 
 
@@ -202,7 +215,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
 
   bodyWidget(BuildContext context) {
-    return Container(child: Center(
+    return Container(child:pulse == "" ? CircularProgressIndicator.adaptive()
+        : Center(
+
       child:Column(
         children: [
           // Heart rate:
