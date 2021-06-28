@@ -32,6 +32,7 @@ class FormScreenState extends State<FormScreen> {
   late var _vitals = [];
   late User _user;
   late String _id;
+  late bool _released = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -159,6 +160,7 @@ class FormScreenState extends State<FormScreen> {
       ),
       onSaved: ( value) {
         _phoneNumber = value!;
+        globals.phoneNumber = _phoneNumber;
       },
     );
   }
@@ -337,6 +339,7 @@ class FormScreenState extends State<FormScreen> {
                        'medication' : _medications,
                        'vitals': _vitals,
                        'itemID': _user.uid,
+                       'released':_released,
                      });
 
                      // FirebaseFirestore.instance

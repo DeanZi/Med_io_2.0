@@ -221,9 +221,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
 
   bodyWidget(BuildContext context) {
-    return Container(child:pulse == "" ? CircularProgressIndicator.adaptive()
-        : Center(
-
+    return Container(child: Center(
       child:Column(
         children: [
           // Heart rate:

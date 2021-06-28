@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/utils/Dimensions.dart';
+import 'package:medio2/globals.dart' as globals;
 
 
 class EmergencyScreen extends StatefulWidget {
@@ -61,6 +62,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                               .collection('emergencyCall')
                               .doc(_user.uid)
                               .set({
+                            'phoneNumber' : globals.phoneNumber,
                             'date_time' : DateTime.now().millisecondsSinceEpoch,
                             'firstName' : _firstName,
                             'lastName' : _lastName,

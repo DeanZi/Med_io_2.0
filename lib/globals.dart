@@ -4,3 +4,4 @@ String accessToken = "";
 String pulse = "";
 String generalFeeling = "";
 String bodyTemp = "";
+String phoneNumber = "";
