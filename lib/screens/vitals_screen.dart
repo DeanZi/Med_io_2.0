@@ -189,7 +189,7 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
                 _sendSubmit?
                 Container(
-                  child: Text('Thank you for submit!',style: TextStyle(color:Colors.black, fontSize: 20),),) : Container(),
+                  child: Text('Thank you for updating us!',style: TextStyle(color:Colors.black, fontSize: 20),),) : Container(),
               ],
             ),
           ),
