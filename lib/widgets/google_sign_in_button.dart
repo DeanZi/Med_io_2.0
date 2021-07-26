@@ -63,7 +63,6 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
               }else{
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    //TODO: to replace the EmergencyScreen with questionnaire
                     builder: (context) => FormScreen( user: user, id: "0",
                     ),
                   ),

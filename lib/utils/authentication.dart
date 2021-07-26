@@ -8,19 +8,34 @@ import 'package:medio2/screens/dashboard_screen.dart';
 import 'package:medio2/screens/quetionnaire_screen.dart';
 import 'package:medio2/globals.dart';
 
-
+/***
+ *
+ * Authentication Class :
+ *
+ *  Checks that a user is a valid google user
+ *  Communicates with signInButton functionality
+ *  Communicates with signOut functionality
+ *
+ */
 class Authentication {
+
+  // init of firebase, kept in firebaseApp.
   static Future<FirebaseApp> initializeFirebase({
     required BuildContext context,
   }) async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
+    // Keeps current user in user
     User? user = FirebaseAuth.instance.currentUser;
+    // Check that an actual user has entered
     if (user != null) {
-
+      // Critical to know if its a first time user or not
       Duration diff = user.metadata.creationTime!.difference(user.metadata.lastSignInTime!);
       bool firstTimeUser = diff.inMilliseconds > 1000;
+      // sanity check
       print(diff.inMilliseconds);
+      //case we are not first time sign in user
+      // we gonna sign in into dashboard screen to see previous measurements
       if(!firstTimeUser){
         final GoogleSignIn googleSignIn = GoogleSignIn();
         final GoogleSignInAccount? googleSignInAccount =
@@ -34,7 +49,10 @@ class Authentication {
             ),
           ),
         );
-      }else{
+      }
+      // is first time sign in user
+      // being sent to initial FormScreen
+      else{
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => FormScreen(user: user,id:"0"
@@ -48,6 +66,12 @@ class Authentication {
     return firebaseApp;
   }
 
+  /***
+   * Communication with GoogleSignInButton --> being called when
+   * When we are not a "first time" user
+   *
+   *
+   */
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
@@ -71,20 +95,26 @@ class Authentication {
         await auth.signInWithCredential(credential);
 
         user = userCredential.user;
+
+        /*
+        exceptions mainly for testing sanity checks
+        not for production
+         */
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
-          // handle the error here
         }
         else if (e.code == 'invalid-credential') {
-          // handle the error here
         }
       } catch (e) {
-        // handle the error here
       }
     }
 
     return user;
   }
+
+  /**
+   * Util for signOut --> called when an error occurs
+   */
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
@@ -95,6 +125,9 @@ class Authentication {
     );
   }
 
+  /**
+   * Communication with GoogleSignOut
+   */
   static Future<void> signOut({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
