@@ -6,6 +6,14 @@ import 'package:flutter/material.dart';
 
 import 'dashboard_screen.dart';
 
+/***
+ * Quetionnaire Class:
+ *
+ *  presents vitals insertion form for first time user entrance
+ *  connects with google API to FireBase in order to set the new data from
+ *  form into DB
+ *
+ */
 class FormScreen extends StatefulWidget {
   const FormScreen({Key? key, required User user, required String id})
       : _user = user,
@@ -325,7 +333,12 @@ class FormScreenState extends State<FormScreen> {
                     print(_diseases);
                     print(_medications);
 
-
+       /**
+        *
+        * On Submit Pressed
+        * we are setting here the new Data
+        * into our DB
+        */
                      FirebaseFirestore.instance
                          .collection('patients')
                          .doc(_user.uid)
@@ -374,9 +387,13 @@ class FormScreenState extends State<FormScreen> {
     );
   }
 
-  updateItemID(String id) {
-     globals.itemID = id;
-    FirebaseFirestore.instance.collection('patients').doc(id).update({'itemID':id});
-
-  }
+  /**
+   * Helper function for testing (that a patient receives correct ID)
+   * Not being used in production
+   */
+  // updateItemID(String id) {
+  //    globals.itemID = id;
+  //    FirebaseFirestore.instance.collection('patients').doc(id).update({'itemID':id});
+  //
+  // }
 }

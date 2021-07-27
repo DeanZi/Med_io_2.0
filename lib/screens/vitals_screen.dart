@@ -8,6 +8,12 @@ import 'package:flutter_spinbox/material.dart';
 
 import '../globals.dart';
 
+
+/***
+ *
+ * VitalsScreen Class:
+ *  Connection with GoogleFit API inorder to get the pulse (BPM)
+ */
 class VitalsScreen extends StatefulWidget {
   const VitalsScreen({Key? key, required User user})
       : _user = user,
@@ -198,7 +204,15 @@ class _VitalsScreenState extends State<VitalsScreen> {
     );
   }
 
- Future<String> _getHeartRateFromGoogle() async {
+
+  /***
+   * The Connection to GoogleFit API
+   * connection via google oauth playground
+   * Construct an HTTP request by specifying the URI, HTTP Method,
+   * headers, content type and request body.
+   *
+   */
+  Future<String> _getHeartRateFromGoogle() async {
 
     final bodyMsg = jsonEncode({
       "startTimeMillis": 1624395600000,
@@ -221,7 +235,6 @@ class _VitalsScreenState extends State<VitalsScreen> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer '+ accessToken,
-        //'Authorization': 'Bearer ya29.a0AfH6SMAKy7qtorGSFtX84kCgQ30ji-c5EYNqXmjPjWk6i7cfK7j0fVbwPI83-g2Akmyn0jW2BpGZQvpNtG6MN0kLkqIN4VTgLCns1qbBsTPhkUWObz31iF7gHcZL7rmapUqHAY396EvANb8UhkScF37XiXca',
 
       },
       body:bodyMsg,
@@ -232,11 +245,13 @@ class _VitalsScreenState extends State<VitalsScreen> {
       _pulse = "N/A";
     else
       _pulse = pulse.toString();
-    //print(jsonDecode(response.body));
     return _pulse;
   }
 
-
+  /***
+   * Parse process to get the desired value (Pulse)
+   * from the respinse body
+   */
   int iterateJson(String jsonStr) {
     Map<String, dynamic> myMap = json.decode(jsonStr);
     List<dynamic> entitlements = myMap["bucket"];
@@ -252,7 +267,6 @@ class _VitalsScreenState extends State<VitalsScreen> {
 
     });
 
-    //print(pulse);
     return pulse;
   }
 

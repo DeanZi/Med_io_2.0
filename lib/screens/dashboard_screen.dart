@@ -1,12 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medio2/screens/about_screen.dart';
 import 'package:medio2/screens/vitals_screen.dart';
 import 'package:medio2/screens/emergency_screen.dart';
-import 'package:medio2/screens/quetionnaire_screen.dart';
 import 'package:medio2/screens/user_info_screen.dart';
 
+/***
+ * Class DashBoard:
+ *  The main screen holds the BottomNavigationBar and sends user to either ---
+ *    UserInfoScreen
+ *    VitalsScreen
+ *    EmergencyScreen
+ *    AboutScreen
+ *
+ *
+ */
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key, required User user, required String id})
       : _user = user,
@@ -77,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   goToScreen(int currentIndex) {
-    print('indexx: $currentIndex');
+    //print('indexx: $currentIndex');
     switch(currentIndex){
       case 0:
         return UserInfoScreen(user: _user);
